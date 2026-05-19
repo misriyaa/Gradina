@@ -1,17 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import api from '../../services/api';
+import React, { useEffect, useState } from "react";
+import api from "../../services/api";
 
-const StatCard = ({ label, value, icon, accent }) => (
-  <div className={`relative overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm p-6 flex flex-col gap-3 hover:shadow-md transition-shadow duration-200`}>
-    <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl ${accent}`}>
+const StatCard = ({ label, value, icon, accent, barColor }) => (
+  <div className="relative overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm p-6 flex flex-col gap-3 hover:shadow-md transition-all duration-300">
+
+    {/* Icon */}
+    <div
+      className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${accent}`}
+    >
       {icon}
     </div>
+
+    {/* Content */}
     <div>
-      <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">{label}</p>
-      <p className="text-3xl sm:text-4xl font-bold text-[#002042] leading-none">{value}</p>
+      <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">
+        {label}
+      </p>
+
+      <p className="text-3xl sm:text-4xl font-bold text-[#002042] leading-none">
+        {value}
+      </p>
     </div>
-    {/* decorative bar */}
-    <div className={`absolute bottom-0 left-0 h-1 w-full ${accent.replace('bg-', 'bg-').replace('text-', 'bg-')}`} />
+
+    {/* Bottom Accent */}
+    <div
+      className={`absolute bottom-0 left-0 h-1 w-full ${barColor}`}
+    />
   </div>
 );
 
@@ -20,69 +34,101 @@ export default function AdminDashboard() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    api.get('/stats/dashboard')
-      .then(res => setStats(res.data))
+    api
+      .get("/stats/dashboard")
+      .then((res) => setStats(res.data))
       .catch(() => setError(true));
   }, []);
 
-  if (error) return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <p className="text-red-500 text-sm">Failed to load dashboard stats.</p>
-    </div>
-  );
-
-  if (!stats) return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="flex flex-col items-center gap-3">
-        <div className="w-8 h-8 border-4 border-[#002042] border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm text-gray-400 tracking-wide">Loading dashboard…</p>
+  // Error State
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-full py-20">
+        <p className="text-red-500 text-sm">
+          Failed to load dashboard stats.
+        </p>
       </div>
-    </div>
-  );
+    );
+  }
+
+  // Loading State
+  if (!stats) {
+    return (
+      <div className="flex items-center justify-center h-full py-20">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 border-4 border-[#002042] border-t-transparent rounded-full animate-spin" />
+
+          <p className="text-sm text-gray-400 tracking-wide">
+            Loading dashboard...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const cards = [
     {
-      label: 'Total Sites',
+      label: "Total Sites",
       value: stats.totalSites ?? 0,
-      icon: '🏗️',
-      accent: 'bg-blue-50 text-blue-500',
+      icon: "🏗️",
+      accent: "bg-blue-50 text-blue-500",
+      barColor: "bg-blue-500",
     },
     {
-      label: 'Total Managers',
+      label: "Total Managers",
       value: stats.totalManagers ?? 0,
-      icon: '👷',
-      accent: 'bg-amber-50 text-amber-500',
+      icon: "👷",
+      accent: "bg-amber-50 text-amber-500",
+      barColor: "bg-amber-500",
     },
     {
-      label: 'Workers Present Today',
+      label: "Workers Present Today",
       value: stats.totalWorkersPresentToday ?? 0,
-      icon: '✅',
-      accent: 'bg-green-50 text-green-500',
+      icon: "✅",
+      accent: "bg-green-50 text-green-500",
+      barColor: "bg-green-500",
     },
     {
-      label: 'Monthly Payroll',
-      value: `₹${(stats.totalMonthlyPayroll ?? 0).toLocaleString('en-IN')}`,
-      icon: '💰',
-      accent: 'bg-purple-50 text-purple-500',
+      label: "Monthly Payroll",
+      value: `₹${(
+        stats.totalMonthlyPayroll ?? 0
+      ).toLocaleString("en-IN")}`,
+      icon: "💰",
+      accent: "bg-purple-50 text-purple-500",
+      barColor: "bg-purple-500",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-10">
+    <div className="min-h-screen bg-[#f5f7fb]">
 
-      {/* Header */}
-      <div className="mb-8">
-        <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Overview</p>
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#002042]">Admin Dashboard</h1>
+      {/* Main Content Wrapper */}
+      <div className="ml-0 lg:ml-64 p-4 sm:p-6 lg:p-8">
+
+        {/* Header */}
+        <div className="mb-8">
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">
+            Overview
+          </p>
+
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#002042]">
+            Admin Dashboard
+          </h1>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+
+          {cards.map((card) => (
+            <StatCard
+              key={card.label}
+              {...card}
+            />
+          ))}
+
+        </div>
+
       </div>
-
-      {/* Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
-        {cards.map((card) => (
-          <StatCard key={card.label} {...card} />
-        ))}
-      </div>
-
     </div>
   );
 }
