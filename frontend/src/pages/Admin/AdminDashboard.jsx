@@ -25,19 +25,20 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="pb-2"><CardTitle className="text-sm text-gray-500">Total Sites</CardTitle></CardHeader>
-          <CardContent><div className="text-3xl font-bold">{stats.totalSites}</div></CardContent>
+          <CardContent><div className="text-3xl font-bold">{stats.totalSites || 0}</div></CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2"><CardTitle className="text-sm text-gray-500">Total Managers</CardTitle></CardHeader>
-          <CardContent><div className="text-3xl font-bold">{stats.totalManagers}</div></CardContent>
+          <CardContent><div className="text-3xl font-bold">{stats.totalManagers || 0}</div></CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2"><CardTitle className="text-sm text-gray-500">Workers Present Today</CardTitle></CardHeader>
-          <CardContent><div className="text-3xl font-bold">{stats.totalWorkersPresentToday}</div></CardContent>
+          <CardContent><div className="text-3xl font-bold">{stats.totalWorkersPresentToday || 0}</div></CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2"><CardTitle className="text-sm text-gray-500">Total Monthly Payroll</CardTitle></CardHeader>
-          <CardContent><div className="text-3xl font-bold">${stats.totalMonthlyPayroll.toLocaleString()}</div></CardContent>
+          {/* ✅ Fixed: Safe evaluation if payroll data is empty */}
+          <CardContent><div className="text-3xl font-bold">${stats.totalMonthlyPayroll?.toLocaleString() || 0}</div></CardContent>
         </Card>
       </div>
     </div>

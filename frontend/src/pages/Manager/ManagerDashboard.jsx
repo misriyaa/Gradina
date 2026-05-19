@@ -29,11 +29,12 @@ export default function ManagerDashboard() {
         </Card>
         <Card>
           <CardHeader className="pb-2"><CardTitle className="text-sm text-gray-500">Today's Attendance</CardTitle></CardHeader>
-          <CardContent><div className="text-3xl font-bold">{stats.todayAttendance} Present</div></CardContent>
+          <CardContent><div className="text-3xl font-bold">{stats.todayAttendance || 0} Present</div></CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2"><CardTitle className="text-sm text-gray-500">This Month's Spending</CardTitle></CardHeader>
-          <CardContent><div className="text-3xl font-bold">${stats.thisMonthSpending.toLocaleString()}</div></CardContent>
+          {/* ✅ Fixed: Safe evaluation if spending data is uninitialized */}
+          <CardContent><div className="text-3xl font-bold">${stats.thisMonthSpending?.toLocaleString() || 0}</div></CardContent>
         </Card>
       </div>
     </div>
