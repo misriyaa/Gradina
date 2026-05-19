@@ -1,9 +1,7 @@
 import axios from 'axios';
 
-// ✅ Clean up the variable and fall back to localhost if it's missing
 const rawBackendUrl = import.meta.env.VITE_RENDER_BACKEND_URL;
 
-// This ensures we never append "undefined" into your network string paths
 const BACKEND_URL = rawBackendUrl && rawBackendUrl !== "undefined"
   ? rawBackendUrl 
   : import.meta.env.PROD
@@ -12,7 +10,19 @@ const BACKEND_URL = rawBackendUrl && rawBackendUrl !== "undefined"
 
 const api = axios.create({
   baseURL: `${BACKEND_URL}/api`,
-  withCredentials: true, // Crucial for sessions/cookies cross-origin
+  withCredentials: true,
+});
+
+// ✅ FIX: Attach JWT token to every request
+// Without this, /auth/me gets no Authorization header → 401 → user never stays logged in
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
 });
 
 export default api;
