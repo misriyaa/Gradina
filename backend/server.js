@@ -21,7 +21,18 @@ const statsRoutes = require("./routes/statsRoutes");
 
 const app = express();
 
-app.use(cors());
+// ✅ FIX 1: Explicit CORS Configuration for Production Deployment
+app.use(cors({
+  origin: [
+    "https://gradina.vercel.app",                 // Your live Vercel frontend link
+    "https://gradina-1hsnecbge-misriyas-projects.vercel.app", // Your Vercel preview link (from screenshot)
+    "http://localhost:5173"                       // Your local development frontend link
+  ],
+  credentials: true,                              // Allows login sessions / tokens to pass smoothly
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
@@ -64,10 +75,8 @@ const PORT = process.env.PORT || 5000;
 connectDB().then(async () => {
   await seedAdmin();
 
+  // ✅ FIX 2: Dynamic console logging so you don't look for localhost on production
   app.listen(PORT, () => {
-    console.log(
-      `Server running on http://localhost:${PORT}`
-    );
+    console.log(`Server successfully initialized and listening on port: ${PORT}`);
   });
-
 });
