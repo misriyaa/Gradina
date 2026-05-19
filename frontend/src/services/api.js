@@ -10,11 +10,11 @@ const BACKEND_URL = rawBackendUrl && rawBackendUrl !== "undefined"
 
 const api = axios.create({
   baseURL: `${BACKEND_URL}/api`,
-  withCredentials: true,
+  // ✅ Removed withCredentials: true — not needed for JWT auth,
+  // and it was causing the CORS wildcard conflict
 });
 
-// ✅ FIX: Attach JWT token to every request
-// Without this, /auth/me gets no Authorization header → 401 → user never stays logged in
+// ✅ Attach JWT token to every request via Authorization header
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
