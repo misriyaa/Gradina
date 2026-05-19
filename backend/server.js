@@ -24,12 +24,12 @@ const app = express();
 // ✅ FIX 1: Explicit CORS Configuration for Production Deployment
 app.use(cors({
   origin: [
-    "https://gradina.vercel.app",                 // Your live Vercel frontend link
-    "https://gradina-1hsnecbge-misriyas-projects.vercel.app", // Your Vercel preview link (from screenshot)
-    "http://localhost:5173"                       // Your local development frontend link
+    "https://gradina.vercel.app",                 
+    "https://gradina-1hsnecbge-misriyas-projects.vercel.app", 
+    "http://localhost:5173"                       
   ],
-  credentials: true,                              // Allows login sessions / tokens to pass smoothly
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,                              
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // ✅ Added OPTIONS here
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
