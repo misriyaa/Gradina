@@ -1,5 +1,30 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment files
 .env
-dist
-build
-uploads
+.env.*
+
+# Build files
+dist/
+build/
+
+# Uploads
+uploads/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Coverage
+coverage/
+
+# Cache
+.cache/
+.parcel-cache/
+.vite/
+
+# OS / Editor files
+.DS_Store
+.vscode/
