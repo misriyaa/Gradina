@@ -1,18 +1,16 @@
 import axios from 'axios';
 
-const api = axios.create({
-  baseURL: `${import.meta.env.VITE_RENDER_BACKEND_URL}/api`,
-});
+// ✅ Clean up the variable and fall back to localhost if it's missing
+const rawBackendUrl = import.meta.env.VITE_RENDER_BACKEND_URL;
 
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+// This ensures we never append "undefined" into your network string paths
+const BACKEND_URL = rawBackendUrl && rawBackendUrl !== "undefined"
+  ? rawBackendUrl 
+  : 'http://localhost:5000';
+
+const api = axios.create({
+  baseURL: `${BACKEND_URL}/api`,
+  withCredentials: true, // Crucial for sessions/cookies cross-origin
+});
 
 export default api;
