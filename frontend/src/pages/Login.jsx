@@ -24,7 +24,7 @@ export default function Login() {
       navigate('/');
     } catch (err) {
       if (!err.response) {
-        setError('Cannot connect to server. Make sure the backend is running on port 5000.');
+        setError('Cannot connect to server. Please check your network connection or the backend deployment.');
       } else if (err.response.status === 401) {
         setError('Invalid username or password.');
       } else {
